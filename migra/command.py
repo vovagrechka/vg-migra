@@ -4,8 +4,8 @@ import argparse
 import sys
 from contextlib import contextmanager
 
-from .migra import Migration
-from .statements import UnsafeMigrationException
+from migra import Migration
+from statements import UnsafeMigrationException
 
 
 @contextmanager
@@ -91,7 +91,10 @@ def run(args, out=None, err=None):
             m.add_all_changes(privileges=args.with_privileges)
         try:
             if m.statements:
-                print(str(m.sql, encoding='utf-8'), file=out)
+                res = m.sql
+                if not isinstance(res, str):
+                    res = str(res, encoding='utf-8')
+                print(res, file=out)
         except UnsafeMigrationException:
             print(
                 "-- ERROR: destructive statements generated. Use the --unsafe flag to suppress this error.",
@@ -110,3 +113,6 @@ def do_command():  # pragma: no cover
     args = parse_args(sys.argv[1:])
     status = run(args)
     sys.exit(status)
+
+def main():
+    do_command()

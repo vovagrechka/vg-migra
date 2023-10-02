@@ -5,8 +5,8 @@ from functools import partial
 
 import schemainspect
 
-from .statements import Statements
-from .util import differences
+from statements import Statements
+from util import differences
 
 THINGS = [
     "schemas",
